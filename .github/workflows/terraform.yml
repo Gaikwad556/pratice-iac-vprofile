@@ -1,58 +1,47 @@
-name: terraform
+name: Terraform
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - terraform/**
-  pull_request:
-    branches:
-      - main
-    paths:
-      - terraform/**
+  workflow_dispatch:
 
 env:
+  AWS_ACCESS_KEY: ${{secrets_AWS_ACCESS_KEY}}
+  AWS_SECRET_KEY: ${{secrets_AWS_SECRET_KEY}}
   AWS_REGION: us-east-1
-  AWS_CLUSET: vprofile-eks
-  aws_bucket: ${{secrets.AWS_BUCKET}}
-  AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
-  AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
-  
+  AWS_CLUSTER: vprofile-eks
+  AWS_BUCKET: ${{secrets.AWS_BUCKET}}
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
     defaults:
-      run: 
+      run:
         shell: bash
         working-directory: ./terraform
-
     steps:
-      - name: Checkout 
+      - name: checkout
         uses: actions/checkout@v4
 
-      - name: install terraform
-        uses: hashicorp/setup-terraform@v1
+      - name: terraform install
+        uses: hashicorp/setup-terraform@v3
 
       - name: terraform init
         id: init
-        run: terraform init -backend-config="bucket=$aws_bucket"
+        run: terraform init -backend-config="bucket=$AWS_BUCKET"
+
+      - name: terraform validate
+        id: validate 
+        run: terraform validate
 
       - name: terraform format
         id: fmt
         run: terraform fmt -check
-
-      - name: terraform validate
-        id: validate
-        run: terraform validate
 
       - name: terraform plan
         id: plan
         run: terraform plan -no-color -input=false -out planfile
 
       - name: plan status
+        id: plan status
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       
-
-        
