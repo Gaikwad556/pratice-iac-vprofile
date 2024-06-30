@@ -15,7 +15,7 @@ env:
   AWS_REGION: us-east-1
   AWS_CLUSET: vprofile-eks
   aws_bucket: ${{secrets.AWS_BUCKET}}
-  aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
+  AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
   AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
   
 jobs:
