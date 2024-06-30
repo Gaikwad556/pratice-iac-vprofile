@@ -3,8 +3,8 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_ACCESS_KEY: ${{secrets_AWS_ACCESS_KEY}}
-  AWS_SECRET_KEY: ${{secrets_AWS_SECRET_KEY}}
+  AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+  AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
   AWS_REGION: us-east-1
   AWS_CLUSTER: vprofile-eks
   AWS_BUCKET: ${{secrets.AWS_BUCKET}}
