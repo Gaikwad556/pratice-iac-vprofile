@@ -6,8 +6,8 @@ env:
   AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
   AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
   AWS_REGION: us-east-1
-  AWS_CLUSTER: vprofile-eks
   AWS_BUCKET: ${{secrets.AWS_BUCKET}}
+  AWS_CLUSTER: vprofile-eks
 
 jobs:
   terraform:
@@ -16,11 +16,12 @@ jobs:
       run:
         shell: bash
         working-directory: ./terraform
+
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: terraform install
+      - name: terraform setup
         uses: hashicorp/setup-terraform@v3
 
       - name: terraform init
@@ -28,7 +29,7 @@ jobs:
         run: terraform init -backend-config="bucket=$AWS_BUCKET"
 
       - name: terraform validate
-        id: validate 
+        id: validate
         run: terraform validate
 
       - name: terraform format
@@ -39,9 +40,7 @@ jobs:
         id: plan
         run: terraform plan -no-color -input=false -out planfile
 
-      - name: plan status
-        id: status
+      - name: plan check status
+        id: check status
         if: steps.plan.outcome == 'failure'
         run: exit 1
-
-      
