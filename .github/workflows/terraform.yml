@@ -1,6 +1,15 @@
 name: Terraform
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - terraform/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - terraform/**
   
 env:
   AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
